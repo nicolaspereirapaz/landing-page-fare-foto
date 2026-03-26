@@ -3,5 +3,3 @@
 Thumbs.db
 
 # Build-free static landing: keep only the runtime files in Git
-img/
-

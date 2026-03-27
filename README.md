@@ -7,7 +7,9 @@ Landing page institucional estática da Fare Foto.
 - `index.html`
 - `style.css`
 - `script.js`
-- `favicon.svg`
+- `img/brand-logo.svg`
+- `img/hero-main.jpg`
+- `img/gallery-01.jpg` até `img/gallery-24.jpg`
 
 ## Como abrir
 

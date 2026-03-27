@@ -1,3 +1,17 @@
+// Hamburger menu
+const nav = document.querySelector('nav');
+const hamburger = document.querySelector('.nav-hamburger');
+hamburger.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', open);
+});
+document.querySelectorAll('nav ul a').forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  });
+});
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {

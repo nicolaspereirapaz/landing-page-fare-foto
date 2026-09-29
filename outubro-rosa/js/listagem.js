@@ -1,6 +1,6 @@
 // Listagem da campanha: busca, categorias e grade de produtos.
 import { filterProducts } from './core.js';
-import { bindCartCount, cardHtml, loadCatalog, setYear } from './ui.js';
+import { bindCartCount, cardHtml, escapeHtml, loadCatalog, setYear } from './ui.js';
 
 const PAGE = 24;
 const MIN_CATEGORY = 3; // categorias com poucos itens ficam só em "Todos"
@@ -20,7 +20,8 @@ function syncUrl() {
   const next = new URLSearchParams();
   if (state.query) next.set('q', state.query);
   if (state.category !== 'Todos') next.set('categoria', state.category);
-  history.replaceState(null, '', `${location.pathname}${next.size ? `?${next}` : ''}`);
+  const query = next.toString(); // (URLSearchParams.size não existe no iOS 16)
+  history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}`);
 }
 
 function renderCategories() {
@@ -31,8 +32,8 @@ function renderCategories() {
     .sort(([a], [b]) => a.localeCompare(b, 'pt-BR'));
   const entries = [['Todos', products.length], ...list];
   categoriesBox.innerHTML = entries
-    .map(([name, total]) => `<button type="button" data-cat="${name.replace(/"/g, '&quot;')}" class="${state.category === name ? 'active' : ''}" aria-pressed="${state.category === name}">
-        <span>${name === 'Todos' ? 'Todos os brindes' : name}</span><small>${total}</small></button>`)
+    .map(([name, total]) => `<button type="button" data-cat="${escapeHtml(name)}" class="${state.category === name ? 'active' : ''}" aria-pressed="${state.category === name}">
+        <span>${name === 'Todos' ? 'Todos os brindes' : escapeHtml(name)}</span><small>${total}</small></button>`)
     .join('');
 }
 

@@ -2,7 +2,7 @@
 import {
   buildWhatsAppUrl, formatBRL, lineSubtotal, lineUnitPrice, readCart, removeItem, setItemQuantity, summarizeCart, writeCart,
 } from './core.js';
-import { BASE, bindCartCount, escapeHtml, imageUrl, setYear } from './ui.js';
+import { BASE, bindCartCount, escapeHtml, imageUrl, loadCatalog, setYear } from './ui.js';
 
 const STEP = 10;
 
@@ -34,7 +34,7 @@ function render() {
   list.innerHTML = cart.map((item) => {
     const unit = lineUnitPrice(item);
     const subtotal = lineSubtotal(item);
-    const image = imageUrl(item.image);
+    const image = escapeHtml(imageUrl(item.image));
     const name = escapeHtml(item.name);
     return `
       <li class="or-cart-row" data-id="${escapeHtml(item.id)}">
@@ -110,3 +110,23 @@ window.addEventListener('storage', () => { cart = readCart(window.localStorage);
 bindCartCount();
 setYear();
 render();
+
+// Atualiza preço e foto dos itens com o catálogo publicado agora: um carrinho antigo
+// não pode mostrar o preço de uma exportação anterior.
+loadCatalog()
+  .then((products) => {
+    const byId = new Map(products.map((product) => [product.id, product]));
+    let changed = false;
+    const next = cart.map((item) => {
+      const product = byId.get(item.productId);
+      if (!product) return item;
+      const variant = product.variants.find((v) => v.label === item.color);
+      const pricing = product.pricing ?? null;
+      const image = variant?.image || item.image;
+      if (JSON.stringify(pricing) === JSON.stringify(item.pricing ?? null) && image === item.image) return item;
+      changed = true;
+      return { ...item, pricing, image };
+    });
+    if (changed) save(next);
+  })
+  .catch(() => { /* sem catálogo: mantém os valores guardados no carrinho */ });

@@ -162,13 +162,10 @@ function render(product, all) {
     quoteButton.disabled = qty < 1;
   }
 
-  function hideAdded() {}
-
   root.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-variant]');
     if (!button) return;
     state.variant = product.variants[Number(button.dataset.variant)];
-    hideAdded();
     paint();
   });
 
@@ -183,7 +180,6 @@ function render(product, all) {
         customInput.value = '';
         state.customText = '';
       }
-      hideAdded();
       paint();
     });
   });
@@ -192,14 +188,12 @@ function render(product, all) {
   customInput.addEventListener('focus', () => {
     state.custom = true;
     customInput.select();
-    hideAdded();
     paint();
   });
   customInput.addEventListener('input', () => {
     state.custom = true;
     state.customText = customInput.value.replace(/\D/g, '').replace(/^0+/, '');
     customInput.value = state.customText;
-    hideAdded();
     paint();
   });
 

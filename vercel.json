@@ -19,9 +19,15 @@
       ]
     },
     {
-      "source": "/outubro-rosa/img/(.*)",
+      "source": "/outubro-rosa/img/produtos/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/outubro-rosa/img/(banner|poster)-(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
       ]
     },
     {

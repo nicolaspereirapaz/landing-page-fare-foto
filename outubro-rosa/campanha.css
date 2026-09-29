@@ -173,7 +173,6 @@ button, input, textarea { font: inherit; }
 .or-summary span, .or-summary small { color: rgba(255,255,255,.7); font-size: .76rem; }
 .or-summary strong { display: block; margin: 2px 0; font-family: 'Outfit', sans-serif; font-size: 1.6rem; }
 .or-summary strong em { font-style: normal; font-size: .9rem; opacity: .7; }
-.or-summary .btn-pink { background: var(--orange); box-shadow: 0 4px 20px rgba(212,83,42,.35); white-space: nowrap; }
 
 /* AÇÕES DO PRODUTO: orçamento direto + adicionar ao carrinho */
 .or-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
@@ -309,7 +308,6 @@ button, input, textarea { font: inherit; }
   .or-main-img img { padding: 18px; }
   .or-highlights { grid-template-columns: 1fr; }
   .or-summary { grid-template-columns: 1fr; }
-  .or-summary .btn-pink { width: 100%; }
   .or-actions { grid-template-columns: 1fr; gap: 10px; }
   /* No celular o aviso aparece embaixo, perto do polegar */
   .or-toast { top: auto; right: 16px; bottom: 16px; transform: translateY(10px); }

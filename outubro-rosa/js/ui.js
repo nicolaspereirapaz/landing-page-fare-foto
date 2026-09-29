@@ -59,18 +59,17 @@ export function cardHtml(product) {
     ? `<small>A partir de</small><strong>${formatBRL(product.startingPrice)}</strong><span>/un. · pedido de 100 un.</span>`
     : '<small>Valor</small><strong>Sob consulta</strong>';
   return `
-    <article class="or-card">
-      <a class="or-card-img" href="${href}" aria-label="${name}">
+    <a class="or-card" href="${href}">
+      <div class="or-card-img">
         ${image ? `<img src="${image}" alt="${name}" loading="lazy" decoding="async" width="400" height="400">` : ''}
-      </a>
+      </div>
       <div class="or-card-body">
         <span class="or-card-cat">${escapeHtml(product.category)}</span>
-        <h3><a href="${href}">${name}</a></h3>
+        <h3>${name}</h3>
         <p class="or-card-colors">${colors} ${colors === 1 ? 'cor disponível' : 'cores disponíveis'}</p>
         <div class="or-card-price">${price}</div>
-        <a class="or-card-btn" href="${href}"><svg class="icon-bag" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>Configurar<span class="extra">&nbsp;produto</span></a>
       </div>
-    </article>`;
+    </a>`;
 }
 
 /** Contador do carrinho no topo: número de produtos (linhas). */

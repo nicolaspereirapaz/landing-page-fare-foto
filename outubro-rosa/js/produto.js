@@ -1,5 +1,5 @@
 // Página do produto: galeria por cor, tabela de quantidades, cálculo automático e carrinho.
-import { REFERENCE_QTY, addToCart, formatBRL, priceTiers, readCart, unitPriceForQuantity, writeCart } from './core.js';
+import { REFERENCE_QTY, addToCart, formatBRL, priceTiers, readCart, setItemQuantity, unitPriceForQuantity, writeCart } from './core.js';
 import { BASE, bindCartCount, cardHtml, escapeHtml, formatName, imageUrl, loadCatalog, setYear } from './ui.js';
 
 const root = document.querySelector('[data-product-root]');
@@ -7,6 +7,33 @@ const id = new URLSearchParams(location.search).get('id') ?? '';
 
 bindCartCount();
 setYear();
+
+const BAG_ICON = '<svg class="icon-bag" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>';
+
+/** Aviso discreto no canto da tela confirmando que o item foi para o carrinho. */
+let toastTimer = 0;
+function showToast({ name, color, qty, image }) {
+  let toast = document.querySelector('.or-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'or-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    document.body.append(toast);
+  }
+  toast.innerHTML = `
+    <span class="or-toast-img">${image ? `<img src="${image}" alt="" width="52" height="52">` : ''}<i aria-hidden="true">✓</i></span>
+    <span class="or-toast-text">
+      <strong>Adicionado ao carrinho</strong>
+      <small>${escapeHtml(name)} · ${escapeHtml(color)} · ${qty} un.</small>
+      <a class="or-toast-link" href="${BASE}/carrinho/">Ver carrinho →</a>
+    </span>
+    <button class="or-toast-close" type="button" aria-label="Fechar aviso">×</button>`;
+  toast.querySelector('.or-toast-close').addEventListener('click', () => toast.classList.remove('show'));
+  requestAnimationFrame(() => toast.classList.add('show'));
+  window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => toast.classList.remove('show'), 4200);
+}
 
 function notFound(message) {
   document.title = 'Produto indisponível – Outubro Rosa | Fare Foto';
@@ -71,10 +98,14 @@ function render(product, all) {
             <strong data-sum-price></strong>
             <small data-sum-total></small>
           </div>
-          <button class="btn-pink" type="button" data-add><svg class="icon-bag" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>Adicionar ao carrinho</button>
+        </div>
+        <div class="or-actions">
+          <button class="btn-quote" type="button" data-quote>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Pedir orçamento
+          </button>
+          <button class="btn-add" type="button" data-add>${BAG_ICON}Adicionar ao carrinho</button>
         </div>
         <p class="or-notice" style="margin-top:14px"><span><strong>Valor estimado.</strong> Os preços exibidos são uma referência e podem mudar no orçamento final, conforme quantidade, personalização, cor escolhida e frete.</span></p>
-        <div class="or-added" data-added role="status"><span>✓ Adicionado ao carrinho Outubro Rosa.</span><a href="${BASE}/carrinho/">Ver carrinho</a></div>
       </div>
     </div>`;
 
@@ -82,8 +113,8 @@ function render(product, all) {
   const colorName = root.querySelector('[data-color-name]');
   const customInput = root.querySelector('[data-custom]');
   const customPrice = root.querySelector('[data-custom-price]');
-  const added = root.querySelector('[data-added]');
   const addButton = root.querySelector('[data-add]');
+  const quoteButton = root.querySelector('[data-quote]');
 
   const orderQuantity = () => (state.custom ? Number(state.customText) || 0 : state.quantity);
 
@@ -128,9 +159,10 @@ function render(product, all) {
       total.textContent = 'Confirmaremos valor, prazo e retirada ou entrega.';
     }
     addButton.disabled = qty < 1;
+    quoteButton.disabled = qty < 1;
   }
 
-  function hideAdded() { added.classList.remove('show'); }
+  function hideAdded() {}
 
   root.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-variant]');
@@ -171,9 +203,10 @@ function render(product, all) {
     paint();
   });
 
-  addButton.addEventListener('click', () => {
+  /** Coloca a configuração atual no carrinho (itens iguais somam a quantidade). */
+  function putInCart() {
     const qty = orderQuantity();
-    if (qty < 1) return;
+    if (qty < 1) return null;
     const v = state.variant;
     const next = addToCart(readCart(window.localStorage), {
       productId: product.id,
@@ -184,7 +217,26 @@ function render(product, all) {
       pricing: product.pricing,
     });
     writeCart(window.localStorage, next);
-    added.classList.add('show');
+    return { qty, variant: v };
+  }
+
+  addButton.addEventListener('click', () => {
+    const done = putInCart();
+    if (!done) return;
+    showToast({ name, color: done.variant.label, qty: done.qty, image: imageUrl(done.variant.image || product.image) });
+    addButton.classList.remove('pulse'); void addButton.offsetWidth; addButton.classList.add('pulse');
+  });
+
+  // Leva direto ao formulário de orçamento com este item no carrinho.
+  // Se o mesmo produto/cor já estiver lá, só ajusta a quantidade (não duplica).
+  quoteButton.addEventListener('click', () => {
+    const qty = orderQuantity();
+    if (qty < 1) return;
+    const cart = readCart(window.localStorage);
+    const existing = cart.find((item) => item.productId === product.id && item.color === state.variant.label);
+    if (existing) writeCart(window.localStorage, setItemQuantity(cart, existing.id, qty));
+    else putInCart();
+    window.location.assign(`${BASE}/carrinho/#orcamento`);
   });
 
   paint();

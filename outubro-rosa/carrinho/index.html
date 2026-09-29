@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrinho – Outubro Rosa | Fare Foto</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#A90F52">
+<link rel="icon" type="image/svg+xml" href="/img/brand-logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/outubro-rosa/campanha.css?v=20260929">
+</head>
+<body>
+
+<nav class="or-nav">
+  <a class="logo" href="/" aria-label="Fare Foto — página inicial"><img src="/img/brand-logo.svg" alt="Fare Foto"></a>
+  <div class="or-nav-links">
+    <a class="hide-sm" href="/outubro-rosa/">Outubro Rosa</a>
+    <a class="or-cart-link" href="/outubro-rosa/carrinho/">🛍️ Carrinho <span class="or-cart-count" data-cart-count></span></a>
+  </div>
+</nav>
+
+<main class="or-cart-page">
+  <div class="wrap">
+    <a class="or-back" href="/outubro-rosa/">← Continuar escolhendo brindes</a>
+    <p class="or-label" style="margin-top:18px">Seu pedido de orçamento</p>
+    <h1>Carrinho Outubro Rosa</h1>
+
+    <div class="or-cart-empty" data-cart-empty hidden>
+      <div style="font-size:2rem" aria-hidden="true">🛍️</div>
+      <h2>Seu carrinho está vazio</h2>
+      <p>Escolha os brindes da campanha, defina cor e quantidade e adicione ao carrinho.</p>
+      <a class="btn-pink" href="/outubro-rosa/">Ver brindes do Outubro Rosa</a>
+    </div>
+
+    <div class="or-cart-layout" data-cart-filled hidden>
+      <div>
+        <div class="or-cart-head">
+          <span data-cart-info></span>
+          <button class="or-link-btn" type="button" data-clear>Esvaziar carrinho</button>
+        </div>
+        <ul class="or-cart-list" data-cart-list></ul>
+      </div>
+
+      <aside class="or-aside">
+        <div class="or-box">
+          <h2>Resumo</h2>
+          <dl>
+            <div><dt>Produtos</dt><dd data-sum-lines>0</dd></div>
+            <div><dt>Unidades</dt><dd data-sum-units>0</dd></div>
+            <div class="or-total"><dt>Total estimado</dt><dd data-sum-total>—</dd></div>
+          </dl>
+          <p class="or-notice"><span><strong>Valor estimado.</strong> Personalização, frete e prazo são confirmados no orçamento final pelo WhatsApp.</span></p>
+        </div>
+
+        <form class="or-box or-form" data-quote-form>
+          <h2>Enviar pedido pelo WhatsApp</h2>
+          <p>Montamos a mensagem com todos os itens. Você revisa antes de enviar.</p>
+          <label>Nome <input name="name" autocomplete="name" required></label>
+          <label>Empresa (opcional) <input name="company" autocomplete="organization"></label>
+          <label>WhatsApp para retorno <input name="phone" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" required></label>
+          <label>Observações (opcional) <textarea name="notes" rows="3" placeholder="Ex.: data do evento, cores do logo…"></textarea></label>
+          <button class="btn-wa" type="submit">💬 Solicitar orçamento</button>
+          <small>Nenhum pagamento é realizado neste site.</small>
+        </form>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer class="or-footer">
+  <p>© <span data-year>2026</span> <strong>Fare Foto</strong> · Jundiaí, SP · <a href="/">Voltar ao site</a></p>
+</footer>
+
+<script type="module" src="/outubro-rosa/js/carrinho.js?v=20260929"></script>
+</body>
+</html>

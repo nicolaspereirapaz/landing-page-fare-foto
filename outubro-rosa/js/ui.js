@@ -68,7 +68,7 @@ export function cardHtml(product) {
         <h3><a href="${href}">${name}</a></h3>
         <p class="or-card-colors">${colors} ${colors === 1 ? 'cor disponível' : 'cores disponíveis'}</p>
         <div class="or-card-price">${price}</div>
-        <a class="or-card-btn" href="${href}">🛍️ Configurar<span class="extra">&nbsp;produto</span></a>
+        <a class="or-card-btn" href="${href}"><svg class="icon-bag" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>Configurar<span class="extra">&nbsp;produto</span></a>
       </div>
     </article>`;
 }

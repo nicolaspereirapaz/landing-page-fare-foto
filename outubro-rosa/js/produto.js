@@ -101,7 +101,7 @@ function render(product, all) {
         </div>
         <div class="or-actions">
           <button class="btn-quote" type="button" data-quote>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Pedir orçamento
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Finalizar pedido
           </button>
           <button class="btn-add" type="button" data-add>${BAG_ICON}Adicionar ao carrinho</button>
         </div>

@@ -343,3 +343,20 @@ button, input, textarea { font: inherit; }
 
 /* Âncora do formulário (botão "Pedir orçamento") abaixo do menu fixo */
 #orcamento { scroll-margin-top: 96px; }
+
+/* Aviso de cookies (só aparece quando o Pixel/Clarity estão configurados) */
+.or-consent {
+  position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 60;
+  display: flex; align-items: center; gap: 16px; max-width: 760px; margin: 0 auto;
+  padding: 14px 16px; border: 1px solid var(--pink-line); border-radius: 14px;
+  background: #fff; box-shadow: 0 12px 32px rgba(60, 20, 40, .16);
+}
+.or-consent p { margin: 0; flex: 1; color: #4A4048; font-size: .86rem; line-height: 1.45; }
+.or-consent-actions { display: flex; flex: none; gap: 8px; }
+.or-consent button { min-height: 40px; padding: 0 16px; border-radius: 999px; font: inherit; font-size: .86rem; font-weight: 700; cursor: pointer; }
+.or-consent-no { border: 1px solid var(--pink-line); background: #fff; color: #6F6A72; }
+.or-consent-yes { border: 1px solid var(--pink); background: var(--pink); color: #fff; }
+@media (max-width: 600px) {
+  .or-consent { flex-direction: column; align-items: stretch; gap: 10px; left: 10px; right: 10px; bottom: 10px; }
+  .or-consent-actions button { flex: 1; }
+}

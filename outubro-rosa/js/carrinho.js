@@ -3,6 +3,7 @@ import {
   buildWhatsAppUrl, formatBRL, lineSubtotal, lineUnitPrice, readCart, removeItem, setItemQuantity, summarizeCart, writeCart,
 } from './core.js';
 import { BASE, bindCartCount, escapeHtml, imageUrl, loadCatalog, setYear } from './ui.js';
+import { afterTracking, originRef, trackCheckout, trackLead } from './tracking.js';
 
 const STEP = 10;
 
@@ -102,7 +103,10 @@ form.addEventListener('submit', (event) => {
     phone: String(data.get('phone') ?? '').trim(),
     notes: String(data.get('notes') ?? '').trim(),
   };
-  window.location.assign(buildWhatsAppUrl(customer, cart));
+  // Lead = pedido de orçamento enviado ao WhatsApp (com o valor estimado do carrinho).
+  trackLead(cart);
+  const url = buildWhatsAppUrl(customer, cart, originRef());
+  afterTracking(() => window.location.assign(url));
 });
 
 window.addEventListener('storage', () => { cart = readCart(window.localStorage); render(); });
@@ -110,6 +114,7 @@ window.addEventListener('storage', () => { cart = readCart(window.localStorage);
 bindCartCount();
 setYear();
 render();
+if (cart.length) trackCheckout(cart);
 
 // Atualiza preço e foto dos itens com o catálogo publicado agora: um carrinho antigo
 // não pode mostrar o preço de uma exportação anterior.

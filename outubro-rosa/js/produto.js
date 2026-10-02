@@ -1,6 +1,7 @@
 // Página do produto: galeria por cor, tabela de quantidades, cálculo automático e carrinho.
 import { REFERENCE_QTY, addToCart, formatBRL, priceTiers, readCart, setItemQuantity, unitPriceForQuantity, writeCart } from './core.js';
 import { BASE, bindCartCount, cardHtml, escapeHtml, formatName, imageUrl, loadCatalog, setYear } from './ui.js';
+import { trackAddToCart, trackViewProduct } from './tracking.js';
 
 const root = document.querySelector('[data-product-root]');
 const id = new URLSearchParams(location.search).get('id') ?? '';
@@ -217,6 +218,7 @@ function render(product, all) {
   addButton.addEventListener('click', () => {
     const done = putInCart();
     if (!done) return;
+    trackAddToCart(product, done.qty);
     showToast({ name, color: done.variant.label, qty: done.qty, image: imageUrl(done.variant.image || product.image) });
     addButton.classList.remove('pulse'); void addButton.offsetWidth; addButton.classList.add('pulse');
   });
@@ -230,10 +232,12 @@ function render(product, all) {
     const existing = cart.find((item) => item.productId === product.id && item.color === state.variant.label);
     if (existing) writeCart(window.localStorage, setItemQuantity(cart, existing.id, qty));
     else putInCart();
+    trackAddToCart(product, qty);
     window.location.assign(`${BASE}/carrinho/#orcamento`);
   });
 
   paint();
+  trackViewProduct(product, REFERENCE_QTY);
 
   const related = all.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 3);
   if (related.length) {

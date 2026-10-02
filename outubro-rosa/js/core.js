@@ -210,7 +210,7 @@ export function summarizeCart(itens) {
   };
 }
 
-export function buildQuoteMessage(cliente, itens) {
+export function buildQuoteMessage(cliente, itens, ref = null) {
   const linhasDoCliente = [`Cliente: ${cliente.name}`];
 
   if (cliente.company) {
@@ -270,9 +270,14 @@ export function buildQuoteMessage(cliente, itens) {
 
   blocos.push("Olá! Gostaria de confirmar disponibilidade, prazo e valor deste pedido.");
 
+  // Código da origem da visita (ex.: OR-META), para saber quais conversas vieram do anúncio.
+  if (ref) {
+    blocos.push(`Ref.: ${ref}`);
+  }
+
   return blocos.join("\n\n");
 }
 
-export function buildWhatsAppUrl(cliente, itens) {
-  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(buildQuoteMessage(cliente, itens))}`;
+export function buildWhatsAppUrl(cliente, itens, ref = null) {
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(buildQuoteMessage(cliente, itens, ref))}`;
 }

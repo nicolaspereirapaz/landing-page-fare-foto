@@ -1,6 +1,7 @@
 // Listagem da campanha: busca, categorias e grade de produtos.
 import { filterProducts } from './core.js';
 import { bindCartCount, cardHtml, escapeHtml, loadCatalog, setYear } from './ui.js';
+import { trackContact } from './tracking.js';
 
 const PAGE = 24;
 const MIN_CATEGORY = 3; // categorias com poucos itens ficam só em "Todos"
@@ -75,6 +76,9 @@ more.addEventListener('click', () => {
   state.shown += PAGE;
   render();
 });
+
+// "Fale com a gente" (outro brinde) também conta como contato pelo WhatsApp.
+document.querySelectorAll('a[href^="https://wa.me/"]').forEach((link) => link.addEventListener('click', trackContact));
 
 bindCartCount();
 setYear();
